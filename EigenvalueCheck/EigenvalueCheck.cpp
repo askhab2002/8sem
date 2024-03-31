@@ -42,10 +42,13 @@ int main(void) {
 			if(fabs(value_right - value_left) > 1e-5) {
 				
 				cout << "   Не сходится, всё провалилось!" << endl;
+				return 0;
 				break;
 			}
 		}
 	}
+
+	cout << "  Собственное значение сошлось!" << endl;
 
 	return 0;
 }
