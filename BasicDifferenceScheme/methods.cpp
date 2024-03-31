@@ -120,6 +120,10 @@ double *Method(int number_method, int N, double A) {
 }
 
 double E_n(int number_method, int n, double A) {
+	if(n == 4) {
+		n = 6;
+	}
+
         int N = pow(10, n);
     
 	double *y = Method(number_method, N, A);
