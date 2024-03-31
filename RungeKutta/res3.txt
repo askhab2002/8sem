@@ -1,0 +1,20 @@
+x = 0.100000 real_y = 0.000025 approx_y = 0.000025 Norm|y() - yh| = 0.000000 Norm|E| = 0.000050 
+
+x = 0.200000 real_y = 0.000400 approx_y = 0.000400 Norm|y() - yh| = 0.000000 Norm|E| = 0.000150 
+
+x = 0.300000 real_y = 0.002025 approx_y = 0.002025 Norm|y() - yh| = 0.000000 Norm|E| = 0.000250 
+
+x = 0.400000 real_y = 0.006400 approx_y = 0.006400 Norm|y() - yh| = 0.000000 Norm|E| = 0.000350 
+
+x = 0.500000 real_y = 0.015625 approx_y = 0.015625 Norm|y() - yh| = 0.000000 Norm|E| = 0.000450 
+
+x = 0.600000 real_y = 0.032400 approx_y = 0.032400 Norm|y() - yh| = 0.000000 Norm|E| = 0.000550 
+
+x = 0.700000 real_y = 0.060025 approx_y = 0.060025 Norm|y() - yh| = 0.000000 Norm|E| = 0.000650 
+
+x = 0.800000 real_y = 0.102400 approx_y = 0.102400 Norm|y() - yh| = 0.000000 Norm|E| = 0.000750 
+
+x = 0.900000 real_y = 0.164025 approx_y = 0.164025 Norm|y() - yh| = 0.000000 Norm|E| = 0.000850 
+
+x = 1.000000 real_y = 0.250000 approx_y = 0.250000 Norm|y() - yh| = 0.000000 Norm|E| = 0.000950 
+
