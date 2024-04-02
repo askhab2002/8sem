@@ -9,7 +9,7 @@ using namespace std;
 
 double *Fourier_2d(function_pointer f, double p, int N) {
 
-	double h = 1/((double)N - 1);
+	double h = 1/((double)N - 0.5);
 
 	double *F = (double *) calloc(N, sizeof(double));
 
