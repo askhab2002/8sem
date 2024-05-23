@@ -77,9 +77,9 @@ double *Fourier_2d(function_pointer f, double p, int N) {
 		}
 	}
 
-	cout << "error_norm = " << sqrt(error_norm) << "   relative error = " << sqrt(error_norm)/sqrt(b_norm) << endl;
+//	cout << "error_norm = " << sqrt(error_norm) << "   relative error = " << sqrt(error_norm)/sqrt(b_norm) << endl;
 
-	cout << " Fourier L_0 error = " << L_0 << "   Fourier L_0 relative = " << L_0_ << endl;
+//	cout << " Fourier L_0 error = " << L_0 << "   Fourier L_0 relative = " << L_0_ << endl;
 //        free(Y);
         free(D);
         free(C);

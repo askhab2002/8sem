@@ -4,5 +4,5 @@ set output "result.png"
 set xlabel "X"
 set ylabel "Y"
 set grid
-set title "2_ODE_Fourier_Sweep_Methods" font "Helvetica Bold, 10"
+set title "2 order ODE Fourie Method" font "Helvetica Bold, 10"
 plot "FourierOut.txt" with line lc rgb "blue", "RealY.txt" with line lc rgb "red"
