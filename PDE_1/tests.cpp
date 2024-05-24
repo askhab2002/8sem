@@ -142,8 +142,10 @@ int main(void) {
 
 	for(int i = 0; i < T; i++) {
 		free(u[i]);
+		free(u_real[i]);
 	}
 	free(u);
+	free(u_real);
 	
 
 	return 0;
