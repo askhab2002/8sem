@@ -79,7 +79,7 @@ void result_out(double **u, double **u_real, int N, int T, string filename) {
         out.open(filename, std::ofstream::out | std::ofstream::trunc);
 
 	double *x_grid = (double *)calloc(N, sizeof(double));
-	double *y_grid = (double *)calloc(T, sizeof(double));
+	double *t_grid = (double *)calloc(T, sizeof(double));
 
 	double h = 1 / ((double)N - 0.5);
 	double t = 1 / ((double)T);
@@ -89,19 +89,19 @@ void result_out(double **u, double **u_real, int N, int T, string filename) {
 	}
 
 	for(int i = 0; i < T; i++) {
-		y_grid[i] = i * t;
+		t_grid[i] = i * t;
 	}
 
 	for(int i = 0; i < N; i++) {
 
 		for(int j = 0; j < T; j++) {
-			out << x_grid[i] << " " << y_grid[j] << " " << u[i][j] << " " << u_real[i][j] << endl;
+			out << x_grid[i] << " " << t_grid[j] << " " << u[i][j] << " " << u_real[i][j] << endl;
 
 		}
 	}
 
 	free(x_grid);
-	free(y_grid);
+	free(t_grid);
 
 	out.close();
 }
