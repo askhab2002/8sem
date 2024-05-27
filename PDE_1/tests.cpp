@@ -95,7 +95,7 @@ void result_out(double **u, double **u_real, int N, int T, string filename) {
 	for(int i = 0; i < N; i++) {
 
 		for(int j = 0; j < T; j++) {
-			out << x_grid[i] << " " << t_grid[j] << " " << u[i][j] << " " << u_real[i][j] << endl;
+			out << x_grid[i] << " " << t_grid[j] << " " << u[j][i] << " " << u_real[j][i] << endl;
 
 		}
 	}
@@ -217,6 +217,7 @@ void test(int func1, int func2, int func3, int func4, int T, int N) {
 	cout << " L_0 error = " << L_0_error << " L_0 relative error = " << L_0_relative_error << endl;
         cout << " error mean disp = " << mean_error << endl;
 
+	
 	result_out(u, u_real, N, T, "result.txt");
 
 	for(int i = 0; i < T; i++) {
