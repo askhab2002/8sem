@@ -8,6 +8,7 @@ set xrange [0:1]
 set title "Difference scheme for heat equation"
 set grid
 set xlabel "x"
-set ylabel "t"
+set ylabel "time"
+set zlabel "T"
 
 splot  "result.txt" using 1:2:3 ls 1 title "Numerical solution", "result.txt" using 1:2:4 ls 2 title "Original function"
