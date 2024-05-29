@@ -25,17 +25,12 @@ double fourier(double **coeff, int num, double x, double y);
 double Scalar(double  **func, double h, int m, int n, int second);
 double *generate_equel(double left, int num);
 double *coeff_out(double **func, int values_number, int second);
-double **coeff_out_2d(int node_number, function_pointer_2d func);
+void coeff_out_2d(int node_number, double **func, double **coeff_new);
+double Lambda_out(int n, double p, int N);
 
 
 
-double **coeff_out_2d(int node_number, function_pointer_2d func) {
-	double left = 0;
-        double *nodes = generate_equel(left, node_number);
-
-
-        double **func_matrix = do_matrix(func, nodes, node_number);
-
+void coeff_out_2d(int node_number, double **func_matrix, double **coeff_new) {
 
         double **coeff = (double **) malloc(node_number * sizeof(double *));
 
@@ -44,7 +39,6 @@ double **coeff_out_2d(int node_number, function_pointer_2d func) {
         }
 
 
-        double **coeff_new = (double **) malloc(node_number * sizeof(double *));
 
         for(int i = 0; i < node_number; i++) {
                 coeff_new[i] = coeff_out(coeff, node_number, i);
@@ -52,13 +46,11 @@ double **coeff_out_2d(int node_number, function_pointer_2d func) {
 
 	for(int i = 0; i < node_number; i++) {
                 free(coeff[i]);
-                free(func_matrix[i]);
         }
         free(coeff);
-        free(func_matrix);
-	free(nodes);
+        
 
-        return coeff_new;
+        return;
 }
 
 double *coeff_out(double **func, int values_number, int second) {
@@ -136,4 +128,8 @@ double **do_matrix(function_pointer_2d func, double *nodes, int node_number) {
 	}
 
 	return matrix;
+}
+
+double Lambda_out(int n, double p, int N) {
+        return p + 2 * ((double)N - 0.5) * ((double)N - 0.5) * (1 - cos((M_PI * n)/((double)N - 0.5)));
 }
