@@ -29,6 +29,14 @@ void fourier_matrix(double **coeff, int N_x, int N_y, double **u);
 void step_solution(double **u_coeff, double **f_coeff, double **u_0, double **u, double **f_, function_pointer_3d f_3d, int N_x, int N_y, int T, int k);
 void Fourier_solution(double **u_coeff, double **f_coeff, double **u_0, double **u, double **f_, function_pointer_3d f_3d, int N_x, int N_y, int T);
 
+void print_sol(function_pointer_3d sol, int N_x, int N_y, int T);
+void sol(function_pointer_3d sol, int N_x, int N_y, int T, int k);
+
+double solution_3(double x, double y, double t);
+double solution_1(double x, double y, double t);
+
+double **Inverse_(int N_x, int N_y, int T);
+double **TriangularSystemP_(int N_x, int N_y, int T, double *f);
 
 int main(void) {
 /*
@@ -44,32 +52,7 @@ int main(void) {
 	test_3(N, f, mIter);
 */
 
-/*
-	function_pointer_2d func = function1_2d;
-	int node_number = 6;
 
-	double left = 0;
-	double *nodes = generate_equel(left, node_number);
-	double **func_matrix = do_matrix(func, nodes, node_number);
-
-	double **coeff_new = coeff_out_2d(node_number, func_matrix);
-
-	cout << " Матрица коэффициентов: " << endl;
-
-	for(int i = 0; i < node_number; i++) {
-		for(int j = 0; j < node_number; j++) {
-			cout << coeff_new[i][j] << " ";
-		}
-		cout << endl;
-	}
-
-	for(int i = 0; i < node_number; i++) {
-		free(func_matrix[i]);
-	}
-	free(func_matrix);
-	free(nodes);
-
-*/
 
 	cout << " Тест на 2д Фурье решение уравнения теплопроводности" << endl;
         cout << endl;
@@ -117,12 +100,18 @@ int main(void) {
                 u_coeff[i] = (double *)calloc(N_y, sizeof(double));
 		f_coeff[i] = (double *)calloc(N_y, sizeof(double));
 		u[i] = (double *)calloc(N_y, sizeof(double));
+		for(int j = 0; j < N_y; j++) {
+			u[i][j] = u_0[i][j];
+		}
 		f_[i] = (double *)calloc(N_y, sizeof(double));
 	}
 
 
+
 	Fourier_solution(u_coeff, f_coeff, u_0, u, f_, f_3d, N_x, N_y, T);
 
+	function_pointer_3d sol = solution_3;
+	print_sol(sol, N_x, N_y, T);
 
 	for(int i = 0; i < N_x; i++) {
 		free(u_coeff[i]);
@@ -137,36 +126,42 @@ int main(void) {
         free(u_0);
         free(u);
         free(f_);
-/*
-	StepMatrix(f_, f_3d, u_0, N_x, N_y, T, k);
 
 
-        double **coeff_new = (double **)malloc(N_x * sizeof(double *));
-	for(int i = 0; i < N_x; i++) {
-		coeff_new[i] = (double *)calloc(N_y, sizeof(double));
-	}
-	
-	coeff_out_2d(N_x, f_, coeff_new);
-
-        cout << " Матрица коэффициентов: " << endl;
-
-        for(int i = 0; i < N_x; i++) {
-                for(int j = 0; j < N_y; j++) {
-                        cout << coeff_new[i][j] << " ";
-                }
-                cout << endl;
-        }
-
-
-	for(int i = 0; i < N_x; i++) {
-		free(f_[i]);
-		free(coeff_new[i]);
-	}
-	free(f_);
-	free(coeff_new);
-*/
 	return 0;
 }
+
+
+
+
+void sol(function_pointer_3d sol, int N_x, int N_y, int T, int k) {
+
+	double h_x = 1/((double)N_x - 0.5);
+        double h_y = 1/((double)N_y - 0.5);
+        double tau = 1/(double)T;
+        
+	for(int i = 0; i < N_x; i++) {
+		for(int j = 0; j < N_y; j++) {
+			cout << (*sol)(i * h_x, j * h_y, tau * k) << " ";
+		}
+		cout << endl;
+	}
+
+	return;
+}
+
+void print_sol(function_pointer_3d f, int N_x, int N_y, int T) {
+
+	
+	for(int k = 0; k < T; k++) {
+	       sol(f, N_x, N_y, T, k);
+	       cout << endl;
+        }
+
+        return;
+}	
+
+	
 
 void StepMatrix(double **f_, function_pointer_3d f_3d, double **u_prev, int N_x, int N_y, int T, int k) {
 	double tau = 1/(double)T;
@@ -198,11 +193,20 @@ void fourier_matrix(double **coeff, int N_x, int N_y, double **u) {
 }
 
 void step_solution(double **u_coeff, double **f_coeff, double **u_0, double **u, double **f_, function_pointer_3d f_3d, int N_x, int N_y, int T, int k) {
-
+ 
+        //cout << " u_0: " << endl;
+	for(int i = 0; i < N_x; i++) {
+                for(int j = 0; j < N_y; j++) {
+                        
+                        u_0[i][j] = u[i][j];
+			//cout << u_0[i][j] << " ";
+                }
+                //cout << endl;
+        }
 
 	StepMatrix(f_, f_3d, u_0, N_x, N_y, T, k);
 
-
+	
 	double *lambda_x = (double *)calloc(N_x, sizeof(double));
 	double *lambda_y = (double *)calloc(N_y, sizeof(double));
 
@@ -214,18 +218,33 @@ void step_solution(double **u_coeff, double **f_coeff, double **u_0, double **u,
                 lambda_y[i] = Lambda_out(i, 0, N_y);
         }
 
-	coeff_out_2d(N_x, f_, f_coeff);
+	cout << " f_: " << endl;
 
+        for(int i = 0; i < N_x; i++) {
+                for(int j = 0; j < N_y; j++) {
+                       cout << f_[i][j] << " ";
+                }
+                cout << endl;
+        }
+
+	coeff_out_2d(N_x, f_, f_coeff);
+/*
+	cout << " u_0: " << endl;
 	for(int i = 0; i < N_x; i++) {
 		for(int j = 0; j < N_y; j++) {
+			cout << u_0[i][j] << " ";
 			u_0[i][j] = u[i][j];
 		}
-	}
+		cout << endl;
+	} */
 
+	cout << " f_coeff: " << endl;
 	for(int i = 0; i < N_x; i++) {
 		for(int j = 0; j < N_y; j++) {
+			cout << f_coeff[i][j] << " ";
 			u_coeff[i][j] = f_coeff[i][j] / (lambda_x[i] + lambda_y[j] + T);
 		}
+		cout << endl;
 	}
 
         fourier_matrix(u_coeff, N_x, N_y, u);
@@ -238,19 +257,30 @@ void step_solution(double **u_coeff, double **f_coeff, double **u_0, double **u,
 }
 
 void Fourier_solution(double **u_coeff, double **f_coeff, double **u_0, double **u, double **f_, function_pointer_3d f_3d, int N_x, int N_y, int T) {
+/*
+	cout << endl;
+        for(int i = 0; i < N_x; i++) {
+                for(int j = 0; j < N_y; j++) {
+                        cout << u_0[i][j] << " ";
+                }
 
-	for(int t = 0; t < T; t++) {
+                cout << endl;
+                cout << endl;
+	}
+*/
+
+	for(int t = 1; t < T; t++) {
 		step_solution(u_coeff, f_coeff, u_0, u, f_, f_3d, N_x, N_y, T, t);
 
-		cout << " Значение функции на шаге " << t + 1 << endl;
+		cout << " Значение функции на шаге " << t << endl;
 		cout << endl;
 		for(int i = 0; i < N_x; i++) {
                         for(int j = 0; j < N_y; j++) {
                                 cout << u[i][j] << " ";
                         }
-                cout << endl;
-		cout << endl;
-        }
+                        cout << endl;
+		        cout << endl;
+                }
 
 	}
 
@@ -271,6 +301,11 @@ double function1_3d(double x, double y, double t) {
 double function3_2d(double x, double y) {
 
 	return cos(1 * M_PI * x) * cos(1 * M_PI * y);
+}
+
+double solution_3(double x, double y, double t) {
+
+	return exp(- M_PI * M_PI * (1 + 1) * t) * cos(1 * M_PI * x) * cos(1 * M_PI * y);
 }
 
 
@@ -294,6 +329,12 @@ double function2(double x) {
 double function1_2d(double x , double y) {
         return cos(x * 4 * M_PI) *  cos(y * 2 * M_PI);
 }
+
+double solution_1(double x, double y, double t) {
+
+        return exp(- M_PI * M_PI * (16 + 4) * t) * cos(4 * M_PI * x) * cos(2 * M_PI * y);
+}
+
 
 double function2_2d(double x, double y) {
         y = 0;
